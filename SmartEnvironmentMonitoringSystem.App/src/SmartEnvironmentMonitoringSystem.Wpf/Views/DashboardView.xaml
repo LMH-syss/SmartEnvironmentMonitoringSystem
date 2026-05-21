@@ -1,0 +1,212 @@
+<UserControl x:Class="SmartEnvironmentMonitoringSystem.Wpf.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock Text="实时监测" Style="{StaticResource PageTitleText}" />
+                <TextBlock Text="{Binding SensorStatusText}" Style="{StaticResource MutedText}" />
+            </StackPanel>
+
+            <UniformGrid Grid.Row="1" Columns="4" Margin="0,20,0,20">
+                <Border Style="{StaticResource MetricCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="温度" Style="{StaticResource MetricTitleText}" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding CurrentTemperature, StringFormat=F1}" Style="{StaticResource MetricValueText}" />
+                            <TextBlock Text=" ℃" Style="{StaticResource MetricUnitText}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MetricCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="湿度" Style="{StaticResource MetricTitleText}" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding CurrentHumidity, StringFormat=F1}" Style="{StaticResource MetricValueText}" />
+                            <TextBlock Text=" %RH" Style="{StaticResource MetricUnitText}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MetricCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="烟雾" Style="{StaticResource MetricTitleText}" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding CurrentSmokePpm}" Style="{StaticResource MetricValueText}" />
+                            <TextBlock Text=" ppm" Style="{StaticResource MetricUnitText}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource MetricCardStyle}">
+                    <StackPanel>
+                        <TextBlock Text="CO2" Style="{StaticResource MetricTitleText}" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding CurrentCo2Ppm}" Style="{StaticResource MetricValueText}" />
+                            <TextBlock Text=" ppm" Style="{StaticResource MetricUnitText}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </UniformGrid>
+
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="320" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource PanelBorderStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="360" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="温度实时曲线" Style="{StaticResource SectionTitleText}" />
+                        <lvc:CartesianChart Grid.Row="1"
+                                            Margin="0,16,0,0"
+                                            Series="{Binding TemperatureSeries}"
+                                            YAxes="{Binding TemperatureAxes}"
+                                            LegendPosition="Hidden" />
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Margin="20,0,0,0" Style="{StaticResource PanelBorderStyle}">
+                    <StackPanel>
+                        <TextBlock Text="运行状态" Style="{StaticResource SectionTitleText}" />
+                        <TextBlock Margin="0,18,0,4" Text="TCP 服务" Style="{StaticResource FieldLabelText}" />
+                        <TextBlock Text="{Binding TcpStatusText}" Style="{StaticResource StatusValueText}" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,18,0,4" Text="串口服务" Style="{StaticResource FieldLabelText}" />
+                        <TextBlock Text="{Binding SerialStatusText}" Style="{StaticResource StatusValueText}" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,18,0,4" Text="最近接收" Style="{StaticResource FieldLabelText}" />
+                        <TextBlock Text="{Binding LastReceivedText}" Style="{StaticResource StatusValueText}" />
+                        <TextBlock Margin="0,18,0,4" Text="设备状态" Style="{StaticResource FieldLabelText}" />
+                        <TextBlock Text="{Binding SensorStatusText}" Style="{StaticResource StatusValueText}" TextWrapping="Wrap" />
+                        <TextBlock Margin="0,18,0,4" Text="当前告警" Style="{StaticResource FieldLabelText}" />
+                        <TextBlock Text="{Binding AlarmStatusText}" Style="{StaticResource StatusValueText}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource PanelBorderStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="180" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="TCP 设备连接" Style="{StaticResource SectionTitleText}" />
+                        <DataGrid Grid.Row="1"
+                                  Margin="0,16,0,0"
+                                  ItemsSource="{Binding TcpDevices}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="设备" Binding="{Binding DeviceId}" Width="100" />
+                                <DataGridTextColumn Header="状态" Binding="{Binding Status}" Width="90" />
+                                <DataGridTextColumn Header="远端" Binding="{Binding RemoteEndPoint}" Width="150" />
+                                <DataGridTextColumn Header="最后消息" Binding="{Binding LastMessageType}" Width="100" />
+                                <DataGridTextColumn Header="最后通信" Binding="{Binding LastSeenAt, StringFormat=HH:mm:ss}" Width="90" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Column="1" Margin="20,0,0,0" Style="{StaticResource PanelBorderStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="180" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="TCP 通信日志" Style="{StaticResource SectionTitleText}" />
+                        <DataGrid Grid.Row="1"
+                                  Margin="0,16,0,0"
+                                  ItemsSource="{Binding TcpCommunicationLogs}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  IsReadOnly="True"
+                                  HeadersVisibility="Column"
+                                  GridLinesVisibility="Horizontal">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="时间" Binding="{Binding Time, StringFormat=HH:mm:ss}" Width="80" />
+                                <DataGridTextColumn Header="设备" Binding="{Binding DeviceId}" Width="90" />
+                                <DataGridTextColumn Header="事件" Binding="{Binding EventType}" Width="90" />
+                                <DataGridTextColumn Header="摘要" Binding="{Binding Message}" Width="*" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Border Grid.Row="4" Margin="0,20,0,0" Style="{StaticResource PanelBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="260" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="实时告警列表" Style="{StaticResource SectionTitleText}" />
+                        <TextBlock Margin="12,4,0,0"
+                                   Text="管理员可处理，普通用户只读"
+                                   Style="{StaticResource MutedText}" />
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1"
+                              Margin="0,16,0,0"
+                              ItemsSource="{Binding RecentAlarms}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="True"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="时间" Binding="{Binding AlarmTime, StringFormat=HH:mm:ss}" Width="90" />
+                            <DataGridTextColumn Header="设备" Binding="{Binding SensorId}" Width="100" />
+                            <DataGridTextColumn Header="类型" Binding="{Binding AlarmType}" Width="110" />
+                            <DataGridTextColumn Header="实际值" Binding="{Binding ActualValue}" Width="90" />
+                            <DataGridTextColumn Header="阈值" Binding="{Binding ThresholdDescription}" Width="140" />
+                            <DataGridTextColumn Header="等级" Binding="{Binding AlarmLevel}" Width="80" />
+                            <DataGridCheckBoxColumn Header="已处理" Binding="{Binding IsHandled}" Width="80" />
+                            <DataGridTextColumn Header="处理人" Binding="{Binding HandledBy}" Width="100" />
+                            <DataGridTemplateColumn Header="操作" Width="90">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="处理"
+                                                Height="28"
+                                                Style="{StaticResource SecondaryButtonStyle}"
+                                                Command="{Binding DataContext.HandleAlarmCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

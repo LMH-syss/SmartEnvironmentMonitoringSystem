@@ -1,0 +1,79 @@
+<UserControl x:Class="SmartEnvironmentMonitoringSystem.Wpf.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="历史数据" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="{Binding StatusText}" Style="{StaticResource MutedText}" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Margin="0,18,0,18" Style="{StaticResource PanelBorderStyle}">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="开始" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                    <DatePicker Margin="8,0,18,0" SelectedDate="{Binding StartDate}" Width="150" />
+                    <TextBlock Text="结束" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                    <DatePicker Margin="8,0,18,0" SelectedDate="{Binding EndDate}" Width="150" />
+                    <TextBlock Text="传感器" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                    <TextBox Margin="8,0,18,0" Text="{Binding SensorId, UpdateSourceTrigger=PropertyChanged}" Width="150" />
+                    <Button Content="查询" Style="{StaticResource PrimaryButtonStyle}" Width="100" Command="{Binding QueryCommand}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="0,16,0,0" Visibility="{Binding DeletePanelVisibility}">
+                    <TextBlock Text="删除范围" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                    <CheckBox Margin="12,0,0,0" Content="温湿度" IsChecked="{Binding DeleteTempHumidity}" VerticalAlignment="Center" />
+                    <CheckBox Margin="12,0,0,0" Content="空气质量" IsChecked="{Binding DeleteAirQuality}" VerticalAlignment="Center" />
+                    <CheckBox Margin="12,0,0,0" Content="告警" IsChecked="{Binding DeleteAlarms}" VerticalAlignment="Center" />
+                    <CheckBox Margin="12,0,18,0" Content="报告" IsChecked="{Binding DeleteReports}" VerticalAlignment="Center" />
+                    <Button Content="删除历史" Style="{StaticResource SecondaryButtonStyle}" Width="100" Command="{Binding DeleteCommand}" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <TabControl Grid.Row="2">
+            <TabItem Header="温湿度">
+                <DataGrid ItemsSource="{Binding TempHumidityRecords}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="时间" Binding="{Binding CollectTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="160" />
+                        <DataGridTextColumn Header="传感器" Binding="{Binding SensorId}" Width="120" />
+                        <DataGridTextColumn Header="温度" Binding="{Binding Temperature}" Width="100" />
+                        <DataGridTextColumn Header="湿度" Binding="{Binding Humidity}" Width="100" />
+                        <DataGridCheckBoxColumn Header="告警" Binding="{Binding IsAlarm}" Width="80" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="空气质量">
+                <DataGrid ItemsSource="{Binding AirQualityRecords}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="时间" Binding="{Binding CollectTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="160" />
+                        <DataGridTextColumn Header="传感器" Binding="{Binding SensorId}" Width="120" />
+                        <DataGridTextColumn Header="烟雾" Binding="{Binding SmokePpm}" Width="100" />
+                        <DataGridTextColumn Header="CO2" Binding="{Binding Co2Ppm}" Width="100" />
+                        <DataGridTextColumn Header="等级" Binding="{Binding Level}" Width="100" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="告警记录">
+                <DataGrid ItemsSource="{Binding AlarmRecords}" AutoGenerateColumns="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="时间" Binding="{Binding AlarmTime, StringFormat=yyyy-MM-dd HH:mm:ss}" Width="160" />
+                        <DataGridTextColumn Header="传感器" Binding="{Binding SensorId}" Width="120" />
+                        <DataGridTextColumn Header="类型" Binding="{Binding AlarmType}" Width="120" />
+                        <DataGridTextColumn Header="实际值" Binding="{Binding ActualValue}" Width="100" />
+                        <DataGridTextColumn Header="阈值" Binding="{Binding ThresholdDescription}" Width="160" />
+                        <DataGridTextColumn Header="等级" Binding="{Binding AlarmLevel}" Width="100" />
+                        <DataGridCheckBoxColumn Header="已处理" Binding="{Binding IsHandled}" Width="90" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

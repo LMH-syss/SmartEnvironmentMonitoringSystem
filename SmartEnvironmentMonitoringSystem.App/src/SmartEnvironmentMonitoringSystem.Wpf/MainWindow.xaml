@@ -1,0 +1,94 @@
+<Window x:Class="SmartEnvironmentMonitoringSystem.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:SmartEnvironmentMonitoringSystem.Wpf.Views"
+        xmlns:vm="clr-namespace:SmartEnvironmentMonitoringSystem.Wpf.ViewModels"
+        mc:Ignorable="d"
+        Title="智能环境监测系统"
+        Height="760"
+        MinHeight="640"
+        Width="1180"
+        MinWidth="980"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource AppBackgroundBrush}">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+            <views:LoginView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HistoryViewModel}">
+            <views:HistoryView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ReportViewModel}">
+            <views:ReportView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ExcelExportViewModel}">
+            <views:ExcelExportView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:UserManagementViewModel}">
+            <views:UserManagementView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ThresholdSettingsViewModel}">
+            <views:ThresholdSettingsView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:CommunicationSettingsViewModel}">
+            <views:CommunicationSettingsView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="64" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,0,1">
+            <Grid Margin="24,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="智能环境监测系统" Style="{StaticResource PageTitleText}" />
+                    <TextBlock Text="" Style="{StaticResource MutedText}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding CurrentUserName}" Style="{StaticResource HeaderMetaText}" />
+                    <Border Width="1" Height="18" Margin="12,0" Background="{StaticResource BorderBrush}" />
+                    <TextBlock Text="{Binding CurrentRole}" Style="{StaticResource HeaderMetaText}" />
+                    <Border Width="1" Height="18" Margin="12,0" Background="{StaticResource BorderBrush}" />
+                    <TextBlock Text="{Binding CurrentTimeText}" Style="{StaticResource HeaderMetaText}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Background="{StaticResource SidebarBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="0,0,1,0">
+                <StackPanel Margin="16,20">
+                    <Button Content="实时监测" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowDashboardCommand}" />
+                    <Button Content="历史数据" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowHistoryCommand}" />
+                    <Button Content="监测报告" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowReportCommand}" />
+                    <Button Content="Excel 导出" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowExcelExportCommand}" />
+
+                    <Separator Margin="0,12,0,16" Visibility="{Binding AdminMenuVisibility}" />
+                    <Button Content="用户管理" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowUserManagementCommand}" Visibility="{Binding AdminMenuVisibility}" />
+                    <Button Content="阈值设置" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowThresholdSettingsCommand}" Visibility="{Binding AdminMenuVisibility}" />
+                    <Button Content="通信设置" Style="{StaticResource SidebarButtonStyle}" Command="{Binding ShowCommunicationSettingsCommand}" Visibility="{Binding AdminMenuVisibility}" />
+                </StackPanel>
+            </Border>
+
+            <ContentControl Grid.Column="1" Content="{Binding CurrentViewModel}" />
+        </Grid>
+    </Grid>
+</Window>

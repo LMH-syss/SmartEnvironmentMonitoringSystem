@@ -1,0 +1,47 @@
+<UserControl x:Class="SmartEnvironmentMonitoringSystem.Wpf.Views.LoginView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             MinHeight="520">
+    <Grid>
+        <Border Width="420"
+                Padding="32"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="{StaticResource SurfaceBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="8">
+            <StackPanel>
+                <TextBlock Text="登录" Style="{StaticResource SectionTitleText}" />
+                <TextBlock Margin="0,8,0,24"
+                           Text=""
+                           Style="{StaticResource MutedText}"
+                           TextWrapping="Wrap" />
+
+                <TextBlock Text="用户名" Style="{StaticResource FieldLabelText}" />
+                <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource InputTextBoxStyle}" />
+
+                <TextBlock Margin="0,16,0,0" Text="密码" Style="{StaticResource FieldLabelText}" />
+                <PasswordBox x:Name="PasswordInput"
+                             PasswordChanged="OnPasswordChanged"
+                             Style="{StaticResource InputPasswordBoxStyle}" />
+
+                <TextBlock Margin="0,12,0,0"
+                           Text="{Binding Message}"
+                           Style="{StaticResource MutedText}"
+                           TextWrapping="Wrap" />
+
+                <Button Margin="0,24,0,0"
+                        Content="登录"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Command="{Binding LoginCommand}" />
+
+                <Button Margin="0,10,0,0"
+                        Content="注册普通用户"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Command="{Binding RegisterCommand}" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

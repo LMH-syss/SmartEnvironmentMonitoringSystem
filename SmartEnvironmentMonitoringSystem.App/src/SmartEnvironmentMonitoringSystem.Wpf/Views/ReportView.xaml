@@ -1,0 +1,73 @@
+<UserControl x:Class="SmartEnvironmentMonitoringSystem.Wpf.Views.ReportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel>
+            <TextBlock Text="监测报告" Style="{StaticResource PageTitleText}" />
+            <TextBlock Text="{Binding StatusText}" Style="{StaticResource MutedText}" />
+        </StackPanel>
+
+        <Border Grid.Row="1" Margin="0,18,0,18" Style="{StaticResource PanelBorderStyle}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="开始" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                <DatePicker Margin="8,0,18,0" SelectedDate="{Binding StartDate}" Width="150" />
+                <TextBlock Text="结束" VerticalAlignment="Center" Style="{StaticResource FieldLabelText}" />
+                <DatePicker Margin="8,0,18,0" SelectedDate="{Binding EndDate}" Width="150" />
+                <Button Content="生成报告" Style="{StaticResource PrimaryButtonStyle}" Width="110" Command="{Binding GenerateCommand}" />
+                <Button Margin="10,0,0,0" Content="查询报告" Style="{StaticResource SecondaryButtonStyle}" Width="110" Command="{Binding QueryCommand}" />
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="340" />
+            </Grid.ColumnDefinitions>
+
+            <DataGrid ItemsSource="{Binding Reports}"
+                      SelectedItem="{Binding SelectedReport}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="编号" Binding="{Binding ReportNo}" Width="150" />
+                    <DataGridTextColumn Header="开始" Binding="{Binding StartTime, StringFormat=yyyy-MM-dd}" Width="110" />
+                    <DataGridTextColumn Header="结束" Binding="{Binding EndTime, StringFormat=yyyy-MM-dd}" Width="110" />
+                    <DataGridTextColumn Header="告警" Binding="{Binding AlarmCount}" Width="80" />
+                    <DataGridTextColumn Header="危险" Binding="{Binding DangerAlarmCount}" Width="80" />
+                    <DataGridTextColumn Header="评价" Binding="{Binding Evaluation}" Width="220" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Border Grid.Column="1" Margin="20,0,0,0" Style="{StaticResource PanelBorderStyle}">
+                <StackPanel DataContext="{Binding SelectedReport}">
+                    <TextBlock Text="报告详情" Style="{StaticResource SectionTitleText}" />
+                    <TextBlock Margin="0,16,0,0" Text="{Binding ReportNo}" Style="{StaticResource StatusValueText}" />
+                    <TextBlock Margin="0,16,0,0" Text="温度" Style="{StaticResource FieldLabelText}" />
+                    <TextBlock Text="{Binding AvgTemperature, StringFormat=平均 {0:F2} ℃}" Style="{StaticResource StatusValueText}" />
+                    <TextBlock Text="{Binding MaxTemperature, StringFormat=最高 {0:F2} ℃}" Style="{StaticResource MutedText}" />
+                    <TextBlock Text="{Binding MinTemperature, StringFormat=最低 {0:F2} ℃}" Style="{StaticResource MutedText}" />
+
+                    <TextBlock Margin="0,16,0,0" Text="湿度" Style="{StaticResource FieldLabelText}" />
+                    <TextBlock Text="{Binding AvgHumidity, StringFormat=平均 {0:F2} %RH}" Style="{StaticResource StatusValueText}" />
+                    <TextBlock Text="{Binding MaxHumidity, StringFormat=最高 {0:F2} %RH}" Style="{StaticResource MutedText}" />
+                    <TextBlock Text="{Binding MinHumidity, StringFormat=最低 {0:F2} %RH}" Style="{StaticResource MutedText}" />
+
+                    <TextBlock Margin="0,16,0,0" Text="空气质量" Style="{StaticResource FieldLabelText}" />
+                    <TextBlock Text="{Binding MaxSmokePpm, StringFormat=烟雾最高 {0} ppm}" Style="{StaticResource StatusValueText}" />
+                    <TextBlock Text="{Binding AvgSmokePpm, StringFormat=烟雾平均 {0:F2} ppm}" Style="{StaticResource MutedText}" />
+                    <TextBlock Text="{Binding MaxCo2Ppm, StringFormat=CO2 最高 {0} ppm}" Style="{StaticResource StatusValueText}" />
+                    <TextBlock Text="{Binding AvgCo2Ppm, StringFormat=CO2 平均 {0:F2} ppm}" Style="{StaticResource MutedText}" />
+
+                    <TextBlock Margin="0,16,0,0" Text="综合评价" Style="{StaticResource FieldLabelText}" />
+                    <TextBlock Text="{Binding Evaluation}" Style="{StaticResource StatusValueText}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
